@@ -107,12 +107,12 @@ export default function InvoicesPage() {
       <table className="w-full border-collapse border">
         <thead>
           <tr className="bg-gray-200">
-            <th className="border p-2">Typ</th> {/* Type */}
-            <th className="border p-2">Titel</th> {/* Title */}
-            <th className="border p-2">Betrag</th> {/* Amount */}
-            <th className="border p-2">Datum</th> {/* Date */}
-            <th className="border p-2">Beschreibung</th> {/* Description */}
-            <th className="border p-2">Ansehen</th> {/* View */}
+            <th className="border p-2">Typ</th> 
+            <th className="border p-2">Titel</th>
+            <th className="border p-2">Betrag</th>
+            <th className="border p-2">Datum</th>
+            <th className="border p-2">Beschreibung</th>
+            <th className="border p-2">Ansehen</th>
           </tr>
         </thead>
         <tbody>
