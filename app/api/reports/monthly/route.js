@@ -1,4 +1,4 @@
-import { generateMonthlyExcel } from '@/utils/excel';
+import { generateMonthlyExcel } from '../../../../utils/excel';
 
 
 
