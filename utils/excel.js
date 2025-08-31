@@ -1,6 +1,6 @@
 import XLSX from 'xlsx';
-import Invoice from '@/models/Invoice';
-import dbConnect from '@/lib/db';
+import Invoice from '../models/Invoice';
+import dbConnect from '../lib/db';
 
 
 export async function generateMonthlyExcel(userId, year, month) {
