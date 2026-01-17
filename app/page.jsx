@@ -60,7 +60,7 @@ export default function Home() {
             هذا الحساب غير مسجل كمسؤول. يرجى التواصل مع الإدارة.
           </p>
           <button
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: "/" })}
             className="text-slate-500 hover:text-slate-700 text-sm hover:underline transition-all"
           >
             تسجيل خروج

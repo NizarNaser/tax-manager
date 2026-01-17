@@ -40,7 +40,7 @@ export default function Navbar() {
               <p className="text-xs text-slate-500">{session.user.email}</p>
             </div>
             <button
-              onClick={() => signOut()}
+              onClick={() => signOut({ callbackUrl: "/" })}
               className="bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 px-4 py-2 rounded-lg text-sm font-medium transition-all"
             >
               تسجيل خروج
@@ -78,7 +78,7 @@ export default function Navbar() {
           <div className="px-4 py-2">
             <p className="text-sm font-medium text-slate-900">{session.user.name || "Admin"}</p>
             <p className="text-xs text-slate-500 mb-2">{session.user.email}</p>
-            <button onClick={() => { signOut(); setMobileMenuOpen(false); }} className="w-full text-center bg-red-50 text-red-600 py-2 rounded-lg hover:bg-red-100">
+            <button onClick={() => { signOut({ callbackUrl: "/" }); setMobileMenuOpen(false); }} className="w-full text-center bg-red-50 text-red-600 py-2 rounded-lg hover:bg-red-100">
               تسجيل خروج
             </button>
           </div>
