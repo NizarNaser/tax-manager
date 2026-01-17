@@ -1,0 +1,33 @@
+{
+  "name": "tax-manager",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "xlsx": "^0.18.5",
+    "cloudinary": "^2.7.0",
+    "dotenv": "^17.2.1",
+    "exceljs": "^4.4.0",
+    "formidable": "^3.5.4",
+    "jspdf": "^3.0.2",
+    "mongoose": "^8.18.0",
+    "next-auth": "^4.24.11",
+    "yet-another-react-lightbox": "^3.25.0"
+  },
+  "devDependencies": {
+    "eslint-config-next": "latest",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/react": "18.2.0",
+    "eslint": "^9.34.0",
+    "tailwindcss": "^4"
+  }
+}
