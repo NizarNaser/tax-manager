@@ -7,6 +7,10 @@ const nextConfig = {
             child_process: false,
             net: false,
             tls: false,
+            rimraf: false,
+            path: false,
+            os: false,
+            crypto: false,
         };
         return config;
     },

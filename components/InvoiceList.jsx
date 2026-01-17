@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ExcelJS from "exceljs";
+// import ExcelJS from "exceljs"; // Removed for dynamic import
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
@@ -20,6 +20,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
   }, [invoices]);
 
   const downloadExcel = async () => {
+    const ExcelJS = (await import("exceljs")).default;
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Invoices");
 
