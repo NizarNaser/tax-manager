@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
-  const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+  const isAdmin = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || "").split(",").includes(session?.user?.email);
 
   // Hide Navbar if not logged in or not admin
   if (!session || !isAdmin) return null;

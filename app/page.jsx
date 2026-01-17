@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Home() {
   const { data: session, status } = useSession();
-  const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+  const isAdmin = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || "").split(",").includes(session?.user?.email);
 
   if (status === "loading") {
     return (
