@@ -1,4 +1,3 @@
-// app/dashboard/page.jsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,12 +12,10 @@ export default function Dashboard() {
     try {
       const res = await fetch("/api/invoices");
       const data = await res.json();
-      console.log("API Response Debug:", data);
       if (!res.ok) throw new Error(data.error || "Failed to fetch");
       if (Array.isArray(data)) {
         setInvoices(data);
       } else {
-        console.warn("Data is not an array:", data);
         setInvoices([]);
       }
     } catch (error) {
@@ -44,36 +41,56 @@ export default function Dashboard() {
       if (res.ok) {
         setInvoices(invoices.filter(inv => inv._id !== id));
       } else {
-        alert("Failed to delete invoice");
+        alert("Fehler beim Löschen der Rechnung");
       }
     } catch (err) {
       console.error(err);
-      alert("Error deleting invoice");
+      alert("Fehler beim Löschen der Rechnung");
     }
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto space-y-8">
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h1 className="text-2xl font-bold text-slate-800 mb-4">Dashboard</h1>
-        <p className="text-slate-500">Manage your income and expenses.</p>
+    <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-12">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="text-left w-full">
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight flex items-center justify-start gap-4">
+            Dashboard
+            <span className="text-yellow-500">Zentrale Verwaltung</span>
+          </h1>
+          <p className="text-slate-400 text-lg mt-2 font-medium">Erfassen Sie Ihre Rechnungen und verfolgen Sie Ihre Ausgaben und Einnahmen präzise.</p>
+        </div>
       </div>
 
-      <InvoiceForm
-        onAdd={handleAdd}
-        initialData={editingInvoice}
-        onUpdate={handleUpdate}
-        onCancel={() => setEditingInvoice(null)}
-      />
+      <div className="grid grid-cols-1 gap-12">
+        {/* Form Section */}
+        <section className="relative">
+          <div className="absolute -top-6 left-8 bg-yellow-500 text-black px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest z-20 shadow-lg">
+            {editingInvoice ? 'Rechnung bearbeiten' : 'Neu hinzufügen'}
+          </div>
+          <div className="glass p-8 md:p-12 rounded-[2.5rem] border border-white/5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/5 blur-[100px] -z-10"></div>
+            <InvoiceForm
+              onAdd={handleAdd}
+              initialData={editingInvoice}
+              onUpdate={handleUpdate}
+              onCancel={() => setEditingInvoice(null)}
+            />
+          </div>
+        </section>
 
-      <InvoiceList
-        invoices={invoices}
-        onEdit={(inv) => {
-          setEditingInvoice(inv);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-        onDelete={handleDelete}
-      />
+        {/* List Section */}
+        <section>
+          <InvoiceList
+            invoices={invoices}
+            onEdit={(inv) => {
+              setEditingInvoice(inv);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onDelete={handleDelete}
+          />
+        </section>
+      </div>
     </div>
   );
 }

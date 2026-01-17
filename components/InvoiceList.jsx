@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import ExcelJS from "exceljs"; // Removed for dynamic import
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
@@ -11,7 +10,6 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
   const [currentImage, setCurrentImage] = useState("");
 
   useEffect(() => {
-    // Ensure invoices is an array before setting state
     if (Array.isArray(invoices)) {
       setList(invoices);
     } else {
@@ -22,23 +20,23 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
   const downloadExcel = async () => {
     const ExcelJS = (await import("exceljs")).default;
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Invoices");
+    const worksheet = workbook.addWorksheet("Rechnungen");
 
     worksheet.columns = [
-      { header: "Type", key: "type", width: 10 },
-      { header: "Title", key: "title", width: 30 },
-      { header: "Amount", key: "amount", width: 15 },
-      { header: "Date", key: "date", width: 20 },
-      { header: "Description", key: "description", width: 30 },
-      { header: "Image URL", key: "imageUrl", width: 40 },
+      { header: "Typ", key: "type", width: 10 },
+      { header: "Titel", key: "title", width: 30 },
+      { header: "Betrag", key: "amount", width: 15 },
+      { header: "Datum", key: "date", width: 20 },
+      { header: "Beschreibung", key: "description", width: 30 },
+      { header: "Bild-URL", key: "imageUrl", width: 40 },
     ];
 
     list.forEach(inv =>
       worksheet.addRow({
-        type: inv.type,
+        type: inv.type === 'income' ? 'Einnahme' : 'Ausgabe',
         title: inv.title,
         amount: inv.amount,
-        date: inv.date ? new Date(inv.date).toLocaleDateString() : "",
+        date: inv.date ? new Date(inv.date).toLocaleDateString('de-DE') : "",
         description: inv.description,
         imageUrl: inv.imageUrl || "",
       })
@@ -51,7 +49,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "invoices.xlsx";
+    a.download = "rechnungen.xlsx";
     a.click();
   };
 
@@ -67,7 +65,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Invoice_${inv.title}_${new Date(inv.date)
+      a.download = `Rechnung_${inv.title}_${new Date(inv.date)
         .toISOString()
         .slice(0, 10)}.jpg`;
       document.body.appendChild(a);
@@ -76,155 +74,166 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Error downloading image:", err);
-      alert("Error downloading image");
+      alert("Fehler beim Herunterladen des Bildes");
     }
   }
 
-  // --- Render Functions ---
-
   const ActionButtons = ({ inv }) => (
-    <div className="flex gap-2 justify-center mt-2">
+    <div className="flex gap-3 justify-center">
       {onEdit && (
         <button
           onClick={() => onEdit(inv)}
-          className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 text-xs rounded transition-colors"
+          className="bg-yellow-500/10 hover:bg-yellow-500 text-yellow-500 hover:text-black px-4 py-1.5 text-xs font-bold rounded-lg transition-all border border-yellow-500/20"
         >
-          Edit
+          Bearbeiten
         </button>
       )}
       {onDelete && (
         <button
           onClick={() => {
-            if (confirm("Are you sure you want to delete this invoice?")) {
+            if (confirm("Sind Sie sicher, dass Sie diese Rechnung löschen möchten?")) {
               onDelete(inv._id);
             }
           }}
-          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 text-xs rounded transition-colors"
+          className="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-1.5 text-xs font-bold rounded-lg transition-all border border-red-500/20"
         >
-          Delete
+          Löschen
         </button>
       )}
     </div>
   );
 
   return (
-    <div className="mt-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-slate-800">Invoices List</h2>
+    <div className="mt-8 space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+          <span className="w-2 h-8 bg-yellow-500 rounded-full"></span>
+          Rechnungsliste
+        </h2>
         <button
           onClick={downloadExcel}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+          className="w-full sm:w-auto bg-[#F2B824] hover:bg-yellow-500 text-black px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-[0_10px_20px_rgba(242,184,36,0.2)] active:scale-95 flex items-center justify-center gap-2"
         >
-          Download Excel
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Excel herunterladen
         </button>
       </div>
 
       {list.length === 0 ? (
-        <div className="text-center p-8 bg-slate-50 rounded-lg border border-slate-200 text-slate-500">
-          No invoices found. Add your first invoice above.
+        <div className="text-center p-16 glass rounded-[2.5rem] border border-white/5 text-slate-500">
+          <div className="mb-4 text-slate-600">
+            <svg className="w-16 h-16 mx-auto opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <p className="text-lg">Derzeit keine Rechnungen vorhanden.</p>
         </div>
       ) : (
         <>
           {/* Mobile View: Cards */}
           <div className="md:hidden space-y-4">
             {list.map((inv) => (
-              <div key={inv._id} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-3">
+              <div key={inv._id} className="glass p-6 rounded-[2rem] border border-white/5 flex flex-col gap-4 relative overflow-hidden group">
+                <div className={`absolute top-0 right-0 w-2 h-full ${inv.type === 'income' ? 'bg-green-500' : 'bg-red-500'} opacity-20`}></div>
+
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="font-bold text-slate-800">{inv.title}</h3>
-                    <p className="text-xs text-slate-500">{inv.date ? new Date(inv.date).toLocaleDateString() : ""}</p>
+                    <h3 className="font-bold text-white text-lg">{inv.title}</h3>
+                    <p className="text-xs text-slate-500 mt-1">{inv.date ? new Date(inv.date).toLocaleDateString('de-DE') : ""}</p>
                   </div>
-                  <span className={`px-2 py-1 rounded text-xs font-semibold ${inv.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                    {inv.type}
+                  <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${inv.type === 'income' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                    {inv.type === 'income' ? 'Einnahme' : 'Ausgabe'}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <p className="text-sm font-medium text-slate-700">Amount:</p>
-                  <p className="font-bold text-slate-900">{inv.amount} €</p>
+                <div className="flex justify-between items-center py-2 border-y border-white/5">
+                  <p className="text-sm text-slate-400">Betrag:</p>
+                  <p className="text-xl font-black text-white">{inv.amount} €</p>
                 </div>
 
                 {inv.description && (
-                  <p className="text-sm text-slate-600 bg-slate-50 p-2 rounded">{inv.description}</p>
+                  <p className="text-sm text-slate-400 bg-white/5 p-3 rounded-xl border border-white/5 italic">"{inv.description}"</p>
                 )}
 
-                <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-between mt-2">
                   {inv.imageUrl ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <img
                         src={inv.imageUrl}
-                        alt="Invoice"
-                        className="w-10 h-10 object-cover rounded cursor-pointer border border-slate-200"
+                        alt="Rechnung"
+                        className="w-12 h-12 object-cover rounded-xl cursor-pointer border border-white/10 hover:border-yellow-500 transition-all"
                         onClick={() => handleOpenImage(inv.imageUrl)}
                       />
                       <button
                         onClick={() => downloadImageHelper(inv)}
-                        className="text-blue-600 text-xs hover:underline"
+                        className="text-blue-400 text-xs font-bold hover:text-blue-300 underline underline-offset-4"
                       >
-                        Download Img
+                        Bild speichern
                       </button>
                     </div>
                   ) : (
-                    <span className="text-xs text-slate-400">No Image</span>
+                    <span className="text-xs text-slate-600">Kein Bild</span>
                   )}
 
-                  <div className="flex gap-2">
-                    <ActionButtons inv={inv} />
-                  </div>
+                  <ActionButtons inv={inv} />
                 </div>
               </div>
             ))}
           </div>
 
           {/* Desktop View: Table */}
-          <div className="hidden md:block overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
-            <table className="w-full text-left text-sm text-slate-600">
-              <thead className="bg-slate-50 text-slate-700 uppercase font-semibold">
+          <div className="hidden md:block glass rounded-[2.5rem] border border-white/5 overflow-hidden shadow-2xl">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-white/5 text-slate-300 font-bold uppercase tracking-wider">
                 <tr>
-                  <th className="p-4 border-b">Type</th>
-                  <th className="p-4 border-b">Title</th>
-                  <th className="p-4 border-b">Amount</th>
-                  <th className="p-4 border-b">Date</th>
-                  <th className="p-4 border-b">Description</th>
-                  <th className="p-4 border-b text-center">Image</th>
-                  <th className="p-4 border-b text-center">Actions</th>
+                  <th className="p-6">Status</th>
+                  <th className="p-6">Titel</th>
+                  <th className="p-6">Betrag</th>
+                  <th className="p-6">Datum</th>
+                  <th className="p-6">Beschreibung</th>
+                  <th className="p-6 text-center">Bild</th>
+                  <th className="p-6 text-center">Aktionen</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-white/5">
                 {list.map((inv) => (
-                  <tr key={inv._id} className="hover:bg-slate-50 transition-colors">
-                    <td className="p-4">
-                      <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${inv.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                        {inv.type}
+                  <tr key={inv._id} className="hover:bg-white/[0.02] transition-colors group">
+                    <td className="p-6">
+                      <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${inv.type === 'income' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                        {inv.type === 'income' ? 'Einnahme' : 'Ausgabe'}
                       </span>
                     </td>
-                    <td className="p-4 font-medium text-slate-800">{inv.title}</td>
-                    <td className="p-4 font-bold">{inv.amount} €</td>
-                    <td className="p-4">
-                      {inv.date ? new Date(inv.date).toLocaleDateString() : ""}
+                    <td className="p-6 font-bold text-white group-hover:text-yellow-500 transition-colors">{inv.title}</td>
+                    <td className="p-6 font-black text-lg text-white">{inv.amount} €</td>
+                    <td className="p-6 text-slate-400">
+                      {inv.date ? new Date(inv.date).toLocaleDateString('de-DE') : ""}
                     </td>
-                    <td className="p-4 max-w-xs truncate" title={inv.description}>{inv.description}</td>
-                    <td className="p-4 text-center">
-                      {inv.imageUrl ? (
-                        <div className="flex flex-col items-center gap-1">
-                          <img
-                            src={inv.imageUrl}
-                            alt="Invoice"
-                            className="w-10 h-10 object-cover rounded cursor-pointer border border-slate-200 hover:scale-110 transition-transform"
-                            onClick={() => handleOpenImage(inv.imageUrl)}
-                          />
-                          <button
-                            className="text-blue-600 text-xs hover:underline mt-1"
-                            onClick={() => downloadImageHelper(inv)}
-                          >
-                            Download
-                          </button>
-                        </div>
-                      ) : (
-                        <span className="text-slate-400 text-xs">No Image</span>
-                      )}
+                    <td className="p-6 text-slate-500 max-w-xs truncate" title={inv.description}>{inv.description || "---"}</td>
+                    <td className="p-6">
+                      <div className="flex flex-col items-center gap-2">
+                        {inv.imageUrl ? (
+                          <>
+                            <img
+                              src={inv.imageUrl}
+                              alt="Rechnung"
+                              className="w-12 h-12 object-cover rounded-xl cursor-pointer border border-white/10 hover:border-yellow-500 hover:scale-110 transition-all shadow-lg"
+                              onClick={() => handleOpenImage(inv.imageUrl)}
+                            />
+                            <button
+                              className="text-blue-400 text-[10px] font-bold hover:text-blue-300 transition-colors"
+                              onClick={() => downloadImageHelper(inv)}
+                            >
+                              Speichern
+                            </button>
+                          </>
+                        ) : (
+                          <span className="text-slate-600 text-[10px]">N/A</span>
+                        )}
+                      </div>
                     </td>
-                    <td className="p-4 text-center">
+                    <td className="p-6">
                       <ActionButtons inv={inv} />
                     </td>
                   </tr>
@@ -240,6 +249,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
           open={open}
           close={() => setOpen(false)}
           slides={[{ src: currentImage }]}
+          className="backdrop-blur-xl"
         />
       )}
     </div>
