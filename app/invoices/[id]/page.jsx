@@ -15,7 +15,12 @@ export default function InvoicePage({ params: paramsPromise }) {
       try {
         const res = await fetch(`/api/invoices/${params.id}`);
         const data = await res.json();
-        setInvoice(data);
+        if (data && !data.error) {
+          setInvoice(data);
+        } else {
+          console.error("Failed to fetch invoice:", data);
+          setInvoice(null);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -31,7 +36,7 @@ export default function InvoicePage({ params: paramsPromise }) {
     a.click();
   };
 
-  if (!invoice) return <p>Daten werden geladen...</p>; {/* جارٍ تحميل البيانات... */}
+  if (!invoice) return <p>Daten werden geladen...</p>; {/* جارٍ تحميل البيانات... */ }
 
   return (
     <article className="max-w-xl mx-auto p-4 border rounded shadow">

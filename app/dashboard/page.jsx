@@ -11,7 +11,12 @@ export default function Dashboard() {
   const fetchInvoices = async () => {
     const res = await fetch("/api/invoices");
     const data = await res.json();
-    setInvoices(data);
+    if (Array.isArray(data)) {
+      setInvoices(data);
+    } else {
+      console.error("Failed to fetch invoices:", data);
+      setInvoices([]);
+    }
   };
 
   useEffect(() => { fetchInvoices(); }, []);

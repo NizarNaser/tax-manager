@@ -14,8 +14,14 @@ export default function InvoicesPage() {
     const fetchInvoices = async () => {
       const res = await fetch("/api/invoices");
       const data = await res.json();
-      setInvoices(data);
-      setFilteredInvoices(data);
+      if (Array.isArray(data)) {
+        setInvoices(data);
+        setFilteredInvoices(data);
+      } else {
+        console.error("Failed to fetch invoices:", data);
+        setInvoices([]);
+        setFilteredInvoices([]);
+      }
     };
     fetchInvoices();
   }, []);
@@ -107,7 +113,7 @@ export default function InvoicesPage() {
       <table className="w-full border-collapse border">
         <thead>
           <tr className="bg-gray-200">
-            <th className="border p-2">Typ</th> 
+            <th className="border p-2">Typ</th>
             <th className="border p-2">Titel</th>
             <th className="border p-2">Betrag</th>
             <th className="border p-2">Datum</th>
