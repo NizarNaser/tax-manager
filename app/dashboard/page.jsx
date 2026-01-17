@@ -12,11 +12,13 @@ export default function Dashboard() {
   const fetchInvoices = async () => {
     try {
       const res = await fetch("/api/invoices");
-      if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
+      console.log("API Response Debug:", data);
+      if (!res.ok) throw new Error(data.error || "Failed to fetch");
       if (Array.isArray(data)) {
         setInvoices(data);
       } else {
+        console.warn("Data is not an array:", data);
         setInvoices([]);
       }
     } catch (error) {
