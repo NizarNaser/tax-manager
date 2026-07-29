@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import { useLanguage } from "./LanguageContext";
 
 export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
+  const { t } = useLanguage();
   const [list, setList] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState("");
@@ -33,7 +35,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
 
     list.forEach(inv =>
       worksheet.addRow({
-        type: inv.type === 'income' ? 'Einnahme' : 'Ausgabe',
+        type: inv.type === 'income' ? t("income") : t("expense"),
         title: inv.title,
         amount: inv.amount,
         date: inv.date ? new Date(inv.date).toLocaleDateString('de-DE') : "",
@@ -74,7 +76,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Error downloading image:", err);
-      alert("Fehler beim Herunterladen des Bildes");
+      alert(t("download_error") || "Fehler beim Herunterladen des Bildes");
     }
   }
 
@@ -85,21 +87,30 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
           onClick={() => onEdit(inv)}
           className="bg-yellow-500/10 hover:bg-yellow-500 text-yellow-500 hover:text-black px-4 py-1.5 text-xs font-bold rounded-lg transition-all border border-yellow-500/20"
         >
-          Bearbeiten
+          {t("edit") || "Bearbeiten"}
         </button>
       )}
       {onDelete && (
         <button
           onClick={() => {
-            if (confirm("Sind Sie sicher, dass Sie diese Rechnung löschen möchten?")) {
+            if (confirm(t("delete_confirm") || "Sind Sie sicher, dass Sie diese Rechnung löschen möchten?")) {
               onDelete(inv._id);
             }
           }}
           className="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-1.5 text-xs font-bold rounded-lg transition-all border border-red-500/20"
         >
-          Löschen
+          {t("delete") || "Löschen"}
         </button>
       )}
+      <a
+        href={`/print/${inv._id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-blue-500/10 hover:bg-blue-500 text-blue-500 hover:text-white px-4 py-1.5 text-xs font-bold rounded-lg transition-all border border-blue-500/20 flex items-center justify-center gap-2"
+      >
+        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+        {t("print") || "Drucken"}
+      </a>
     </div>
   );
 
@@ -108,7 +119,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
         <h2 className="text-2xl font-bold text-white flex items-center gap-3">
           <span className="w-2 h-8 bg-yellow-500 rounded-full"></span>
-          Rechnungsliste
+          {t("invoice_list") || "Rechnungsliste"}
         </h2>
         <button
           onClick={downloadExcel}
@@ -117,7 +128,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          Excel herunterladen
+          {t("download_excel") || "Excel herunterladen"}
         </button>
       </div>
 
@@ -128,7 +139,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <p className="text-lg">Derzeit keine Rechnungen vorhanden.</p>
+          <p className="text-lg">{t("no_invoices") || "Derzeit keine Rechnungen vorhanden."}</p>
         </div>
       ) : (
         <>
@@ -144,7 +155,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
                     <p className="text-xs text-slate-500 mt-1">{inv.date ? new Date(inv.date).toLocaleDateString('de-DE') : ""}</p>
                   </div>
                   <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${inv.type === 'income' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
-                    {inv.type === 'income' ? 'Einnahme' : 'Ausgabe'}
+                    {inv.type === 'income' ? t("income") : t("expense")}
                   </span>
                 </div>
 
@@ -170,11 +181,11 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
                         onClick={() => downloadImageHelper(inv)}
                         className="text-blue-400 text-xs font-bold hover:text-blue-300 underline underline-offset-4"
                       >
-                        Bild speichern
+                        {t("save_image") || "Bild speichern"}
                       </button>
                     </div>
                   ) : (
-                    <span className="text-xs text-slate-600">Kein Bild</span>
+                    <span className="text-xs text-slate-600">{t("no_image") || "Kein Bild"}</span>
                   )}
 
                   <ActionButtons inv={inv} />
@@ -188,13 +199,13 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
             <table className="w-full text-left text-sm">
               <thead className="bg-white/5 text-slate-300 font-bold uppercase tracking-wider">
                 <tr>
-                  <th className="p-6">Status</th>
-                  <th className="p-6">Titel</th>
-                  <th className="p-6">Betrag</th>
-                  <th className="p-6">Datum</th>
-                  <th className="p-6">Beschreibung</th>
-                  <th className="p-6 text-center">Bild</th>
-                  <th className="p-6 text-center">Aktionen</th>
+                  <th className="p-6">{t("status") || "Status"}</th>
+                  <th className="p-6">{t("title")}</th>
+                  <th className="p-6">{t("amount")}</th>
+                  <th className="p-6">{t("date")}</th>
+                  <th className="p-6">{t("description_opt")}</th>
+                  <th className="p-6 text-center">{t("image")}</th>
+                  <th className="p-6 text-center">{t("actions") || "Aktionen"}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -202,7 +213,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
                   <tr key={inv._id} className="hover:bg-white/[0.02] transition-colors group">
                     <td className="p-6">
                       <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${inv.type === 'income' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
-                        {inv.type === 'income' ? 'Einnahme' : 'Ausgabe'}
+                        {inv.type === 'income' ? t("income") : t("expense")}
                       </span>
                     </td>
                     <td className="p-6 font-bold text-white group-hover:text-yellow-500 transition-colors">{inv.title}</td>
@@ -225,7 +236,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
                               className="text-blue-400 text-[10px] font-bold hover:text-blue-300 transition-colors"
                               onClick={() => downloadImageHelper(inv)}
                             >
-                              Speichern
+                              {t("save") || "Speichern"}
                             </button>
                           </>
                         ) : (

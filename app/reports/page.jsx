@@ -5,8 +5,10 @@ import ExcelJS from "exceljs";
 import { jsPDF } from "jspdf";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import { useLanguage } from "../../components/LanguageContext";
 
 export default function ReportsPage() {
+  const { t } = useLanguage();
   const [invoices, setInvoices] = useState([]);
   const [settings, setSettings] = useState({ vatRate: 19, corporateTaxRate: 15 });
   const [month, setMonth] = useState(new Date().getMonth() + 1);
@@ -83,18 +85,18 @@ export default function ReportsPage() {
     <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-12">
       <div className="flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-left w-full">
-          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">Finanzberichte</h1>
-          <p className="text-slate-400 text-lg mt-2 font-medium">Zusammenfassung von Gewinn, Steuern und Cashflow</p>
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">{t("financial_reports")}</h1>
+          <p className="text-slate-400 text-lg mt-2 font-medium">{t("report_summary")}</p>
         </div>
       </div>
 
       <div className="glass p-8 rounded-[2.5rem] border border-white/5 flex flex-wrap items-end gap-6">
         <div className="flex-1 min-w-[200px] space-y-2">
-          <label className="block text-sm font-bold text-slate-400 ml-2 uppercase tracking-widest text-left">Monat (Zahl)</label>
+          <label className="block text-sm font-bold text-slate-400 ml-2 uppercase tracking-widest text-left">{t("month")}</label>
           <input type="number" min="1" max="12" value={month} onChange={(e) => setMonth(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-yellow-500 outline-none transition-all appearance-none text-left font-bold text-xl" />
         </div>
         <div className="flex-1 min-w-[200px] space-y-2">
-          <label className="block text-sm font-bold text-slate-400 ml-2 uppercase tracking-widest text-left">Jahr</label>
+          <label className="block text-sm font-bold text-slate-400 ml-2 uppercase tracking-widest text-left">{t("year")}</label>
           <input type="number" min="2000" max="2100" value={year} onChange={(e) => setYear(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-yellow-500 outline-none transition-all appearance-none text-left font-bold text-xl" />
         </div>
         <div className="flex gap-4 w-full md:w-auto">
@@ -110,22 +112,22 @@ export default function ReportsPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ReportStatCard title="Gesamteinnahmen" value={totals.income} color="green" icon="income" />
-        <ReportStatCard title="Gesamtausgaben" value={totals.expense} color="red" icon="expense" />
-        <ReportStatCard title="Nettogewinn" value={netProfit} color="blue" icon="profit" />
-        <ReportStatCard title={`Umsatzsteuer (VAT - ${settings.vatRate}%)`} value={vat} color="yellow" icon="tax" />
-        <ReportStatCard title={`Körperschaftssteuer (${settings.corporateTaxRate}%)`} value={corporateTax} color="purple" icon="settings" />
+        <ReportStatCard title={t("total_income")} value={totals.income} color="green" icon="income" />
+        <ReportStatCard title={t("total_expense")} value={totals.expense} color="red" icon="expense" />
+        <ReportStatCard title={t("net_profit")} value={netProfit} color="blue" icon="profit" />
+        <ReportStatCard title={`${t("vat")} - ${settings.vatRate}%`} value={vat} color="yellow" icon="tax" />
+        <ReportStatCard title={`${t("corporate_tax")} (${settings.corporateTaxRate}%)`} value={corporateTax} color="purple" icon="settings" />
       </div>
 
       <div className="glass rounded-[2.5rem] border border-white/5 overflow-x-auto overflow-hidden">
         <table className="w-full text-left text-sm">
           <thead className="bg-white/5 text-slate-300 font-bold uppercase">
             <tr>
-              <th className="p-6">Typ</th>
-              <th className="p-6">Titel</th>
-              <th className="p-6">Betrag</th>
-              <th className="p-6">Datum</th>
-              <th className="p-6 text-center">Bild</th>
+              <th className="p-6">{t("type")}</th>
+              <th className="p-6">{t("title")}</th>
+              <th className="p-6">{t("amount")}</th>
+              <th className="p-6">{t("date")}</th>
+              <th className="p-6 text-center">{t("image")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
@@ -133,7 +135,7 @@ export default function ReportsPage() {
               <tr key={inv._id} className="hover:bg-white/[0.02] transition-colors">
                 <td className="p-6">
                   <span className={`px-3 py-1 rounded-full text-[10px] font-bold ${inv.type === 'income' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
-                    {inv.type === 'income' ? 'Einnahme' : 'Ausgabe'}
+                    {inv.type === 'income' ? t("income") : t("expense")}
                   </span>
                 </td>
                 <td className="p-6 font-bold text-white">{inv.title}</td>

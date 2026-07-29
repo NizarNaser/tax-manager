@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLanguage } from "./LanguageContext";
 
 export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCancel }) {
+  const { t } = useLanguage();
   const [type, setType] = useState("income");
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
@@ -86,37 +88,37 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
     <form onSubmit={handleSubmit} className="space-y-8 text-left">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-2">
-          <label className={labelClasses}>Transaktionstyp</label>
+          <label className={labelClasses}>{t("transaction_type")}</label>
           <div className="grid grid-cols-2 gap-4">
             <button
               type="button"
               onClick={() => setType("income")}
               className={`py-4 rounded-2xl font-bold transition-all border ${type === 'income' ? 'bg-green-500 text-black border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.3)]' : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20'}`}
             >
-              Einnahme (Income)
+              {t("income")}
             </button>
             <button
               type="button"
               onClick={() => setType("expense")}
               className={`py-4 rounded-2xl font-bold transition-all border ${type === 'expense' ? 'bg-red-500 text-white border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)]' : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20'}`}
             >
-              Ausgabe (Expense)
+              {t("expense")}
             </button>
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className={labelClasses}>Datum</label>
+          <label className={labelClasses}>{t("date")}</label>
           <input type="date" value={date} onChange={e => setDate(e.target.value)} className={inputClasses} required />
         </div>
 
         <div className="space-y-2">
-          <label className={labelClasses}>Rechnungstitel</label>
-          <input type="text" placeholder="z.B. Kundenprojekt, Webdesign..." value={title} onChange={e => setTitle(e.target.value)} className={inputClasses} required />
+          <label className={labelClasses}>{t("invoice_title")}</label>
+          <input type="text" placeholder="" value={title} onChange={e => setTitle(e.target.value)} className={inputClasses} required />
         </div>
 
         <div className="space-y-2">
-          <label className={labelClasses}>Betrag (€)</label>
+          <label className={labelClasses}>{t("amount")}</label>
           <div className="relative">
             <input type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} className={inputClasses} required />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">€</span>
@@ -125,12 +127,12 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
       </div>
 
       <div className="space-y-2">
-        <label className={labelClasses}>Beschreibung (optional)</label>
-        <textarea placeholder="Zusätzliche Details zur Rechnung..." value={description} onChange={e => setDescription(e.target.value)} className={`${inputClasses} h-32 resize-none`} />
+        <label className={labelClasses}>{t("description_opt")}</label>
+        <textarea placeholder="" value={description} onChange={e => setDescription(e.target.value)} className={`${inputClasses} h-32 resize-none`} />
       </div>
 
       <div className="space-y-4">
-        <label className={labelClasses}>Rechnungsbild {initialData && "(Leer lassen, um das aktuelle zu behalten)"}</label>
+        <label className={labelClasses}>{t("invoice_image")} {initialData && ""}</label>
         <div className="relative group">
           <input
             type="file"
@@ -145,8 +147,8 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <p className="text-slate-400 font-bold">{image ? image.name : 'Bild hierher ziehen oder zum Hochladen klicken'}</p>
-            <p className="text-slate-600 text-xs text-center">Unterstützt JPG, PNG (max. 5MB)</p>
+            <p className="text-slate-400 font-bold">{image ? image.name : t("drag_drop")}</p>
+            <p className="text-slate-600 text-xs text-center">JPG, PNG (max. 5MB)</p>
           </div>
         </div>
       </div>
@@ -160,9 +162,9 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
           {loading ? (
             <span className="flex items-center justify-center gap-2">
               <span className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin"></span>
-              Wird verarbeitet...
+              {t("processing")}
             </span>
-          ) : (initialData ? "Rechnung aktualisieren" : "Rechnung jetzt hinzufügen")}
+          ) : (initialData ? t("update_invoice") : t("add_invoice_now"))}
         </button>
 
         {initialData && onCancel && (
@@ -171,7 +173,7 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
             onClick={onCancel}
             className="px-10 py-5 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-[2rem] font-bold transition-all"
           >
-            Abbrechen
+            {t("cancel")}
           </button>
         )}
       </div>

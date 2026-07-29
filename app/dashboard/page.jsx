@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import InvoiceForm from "../../components/InvoiceForm";
 import InvoiceList from "../../components/InvoiceList";
+import { useLanguage } from "../../components/LanguageContext";
 
 export default function Dashboard() {
   const [invoices, setInvoices] = useState([]);
   const [editingInvoice, setEditingInvoice] = useState(null);
+  const { t } = useLanguage();
 
   const fetchInvoices = async () => {
     try {
@@ -55,10 +57,10 @@ export default function Dashboard() {
       <div className="flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-left w-full">
           <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight flex items-center justify-start gap-4">
-            Dashboard
-            <span className="text-yellow-500">Zentrale Verwaltung</span>
+            {t("dashboard")}
+            <span className="text-yellow-500">{t("central_management")}</span>
           </h1>
-          <p className="text-slate-400 text-lg mt-2 font-medium">Erfassen Sie Ihre Rechnungen und verfolgen Sie Ihre Ausgaben und Einnahmen präzise.</p>
+          <p className="text-slate-400 text-lg mt-2 font-medium">{t("dashboard_desc")}</p>
         </div>
       </div>
 
@@ -66,7 +68,7 @@ export default function Dashboard() {
         {/* Form Section */}
         <section className="relative">
           <div className="absolute -top-6 left-8 bg-yellow-500 text-black px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest z-20 shadow-lg">
-            {editingInvoice ? 'Rechnung bearbeiten' : 'Neu hinzufügen'}
+            {editingInvoice ? t("edit_invoice") : t("add_new")}
           </div>
           <div className="glass p-8 md:p-12 rounded-[2.5rem] border border-white/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/5 blur-[100px] -z-10"></div>

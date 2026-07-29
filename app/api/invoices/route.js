@@ -4,17 +4,12 @@ import cloudinary from "../../../lib/cloudinary";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/authOptions";
 
-async function isAdmin() {
-  const session = await getServerSession(authOptions);
-  if (!session) return false;
-  const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || "").split(",");
-  return adminEmails.includes(session.user.email);
-}
-
 export async function POST(req) {
-  if (!(await isAdmin())) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
+  const userId = session.user.email;
   try {
     const data = await req.json();
     await dbConnect();
@@ -24,6 +19,7 @@ export async function POST(req) {
     const result = await cloudinary.uploader.upload(data.image, { folder: "tax_invoices" });
 
     const invoice = await Invoice.create({
+      userId,
       type: data.type,
       title: data.title,
       amount: data.amount,
@@ -40,12 +36,14 @@ export async function POST(req) {
 }
 
 export async function GET() {
-  if (!(await isAdmin())) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
+  const userId = session.user.email;
   try {
     await dbConnect();
-    const invoices = await Invoice.find().sort({ date: -1 });
+    const invoices = await Invoice.find({ userId }).sort({ date: -1 });
     return new Response(JSON.stringify(invoices), { status: 200 });
   } catch (err) {
     console.error(err);

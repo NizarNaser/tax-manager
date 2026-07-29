@@ -1,22 +1,18 @@
 import dbConnect from "../../../lib/db";
 import Settings from "../../../models/Settings";
+import cloudinary from "../../../lib/cloudinary";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/authOptions";
 
-async function isAdmin() {
-  const session = await getServerSession(authOptions);
-  if (!session) return false;
-  const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || "").split(",");
-  return adminEmails.includes(session.user.email);
-}
-
 export async function GET() {
-  if (!(await isAdmin())) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
+  const userId = session.user.email;
   try {
     await dbConnect();
-    const settings = await Settings.findOne();
+    const settings = await Settings.findOne({ userId });
     return new Response(JSON.stringify(settings || {}), { status: 200 });
   } catch (err) {
     console.error(err);
@@ -25,18 +21,26 @@ export async function GET() {
 }
 
 export async function POST(req) {
-  if (!(await isAdmin())) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
+  const userId = session.user.email;
   try {
     const data = await req.json();
     await dbConnect();
 
-    let settings = await Settings.findOne();
+    // Check if companyLogo is a base64 string
+    if (data.companyLogo && data.companyLogo.startsWith("data:image")) {
+      const result = await cloudinary.uploader.upload(data.companyLogo, { folder: "tax_settings" });
+      data.companyLogo = result.secure_url;
+    }
+
+    let settings = await Settings.findOne({ userId });
     if (settings) {
-      settings = await Settings.findOneAndUpdate({}, data, { new: true });
+      settings = await Settings.findOneAndUpdate({ userId }, data, { new: true });
     } else {
-      settings = await Settings.create(data);
+      settings = await Settings.create({ ...data, userId });
     }
 
     return new Response(JSON.stringify(settings), { status: 200 });

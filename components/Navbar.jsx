@@ -1,18 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { useLanguage } from "./LanguageContext";
 
 export default function Navbar() {
   const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [companyLogo, setCompanyLogo] = useState(null);
+  const { t, language, changeLanguage } = useLanguage();
+
+  useEffect(() => {
+    if (session) {
+      fetch("/api/settings")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.companyLogo) {
+            setCompanyLogo(data.companyLogo);
+          }
+        })
+        .catch((err) => console.error("Error fetching logo:", err));
+    }
+  }, [session]);
 
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
-  const isAdmin = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || "").split(",").includes(session?.user?.email);
-
-  if (!session || !isAdmin) return null;
+  if (!session) return null;
 
   return (
     <nav className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
@@ -29,26 +43,49 @@ export default function Navbar() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-10 items-center">
-            <NavLink href="/dashboard">Dashboard</NavLink>
-            <NavLink href="/invoices">Rechnungen</NavLink>
-            <NavLink href="/reports">Berichte</NavLink>
+            <NavLink href="/dashboard">{t("dashboard")}</NavLink>
+            <NavLink href="/invoices">{t("invoices")}</NavLink>
+            <NavLink href="/reports">{t("reports")}</NavLink>
             <div className="md:mr-4"></div>
-            <NavLink href="/settings">Einstellungen</NavLink>
+            <NavLink href="/settings">{t("settings")}</NavLink>
           </div>
 
           <div className="hidden md:flex items-center gap-6">
-            <div className="text-left hidden lg:block">
-              <p className="text-sm font-bold text-white leading-none mb-1">{session.user.name || "Admin"}</p>
-              <div className="flex items-center justify-start gap-2 px-2 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-[10px] text-yellow-500 font-bold uppercase tracking-wider">
-                <span className="w-1 h-1 bg-yellow-500 rounded-full animate-pulse"></span>
-                Administrator
+            <div className="relative">
+              <select
+                value={language}
+                onChange={(e) => changeLanguage(e.target.value)}
+                className="appearance-none bg-white/5 border border-white/10 hover:border-white/20 text-white text-sm rounded-xl px-4 py-2 pr-8 outline-none cursor-pointer transition-all focus:ring-2 focus:ring-yellow-500/50"
+              >
+                <option value="de">🇩🇪 DE</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="ar">🇸🇦 AR</option>
+                <option value="fr">🇫🇷 FR</option>
+                <option value="uk">🇺🇦 UK</option>
+                <option value="ru">🇷🇺 RU</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              </div>
+            </div>
+
+            <div className="text-left hidden lg:block flex items-center gap-3">
+              {companyLogo && (
+                <img src={companyLogo} alt="Logo" className="w-8 h-8 rounded-full object-cover bg-white inline-block mr-3" />
+              )}
+              <div className="inline-block align-middle">
+                <p className="text-sm font-bold text-white leading-none mb-1">{session.user.name || t("admin")}</p>
+                <div className="flex items-center justify-start gap-2 px-2 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-[10px] text-yellow-500 font-bold uppercase tracking-wider w-fit">
+                  <span className="w-1 h-1 bg-yellow-500 rounded-full animate-pulse"></span>
+                  {t("user")}
+                </div>
               </div>
             </div>
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="bg-white/5 hover:bg-red-500/10 text-red-400 hover:text-red-500 px-5 py-2.5 rounded-xl text-sm font-bold transition-all border border-white/5 hover:border-red-500/20"
             >
-              Abmelden
+              {t("logout")}
             </button>
           </div>
 
@@ -73,22 +110,45 @@ export default function Navbar() {
           }`}
       >
         <div className="p-6 flex flex-col space-y-4">
-          <MobileNavLink href="/dashboard" onClick={() => setMobileMenuOpen(false)}>Dashboard</MobileNavLink>
-          <MobileNavLink href="/invoices" onClick={() => setMobileMenuOpen(false)}>Rechnungen</MobileNavLink>
-          <MobileNavLink href="/reports" onClick={() => setMobileMenuOpen(false)}>Berichte</MobileNavLink>
+          <MobileNavLink href="/dashboard" onClick={() => setMobileMenuOpen(false)}>{t("dashboard")}</MobileNavLink>
+          <MobileNavLink href="/invoices" onClick={() => setMobileMenuOpen(false)}>{t("invoices")}</MobileNavLink>
+          <MobileNavLink href="/reports" onClick={() => setMobileMenuOpen(false)}>{t("reports")}</MobileNavLink>
           <div className="mt-4"></div>
-          <MobileNavLink href="/settings" onClick={() => setMobileMenuOpen(false)}>Einstellungen</MobileNavLink>
+          <MobileNavLink href="/settings" onClick={() => setMobileMenuOpen(false)}>{t("settings")}</MobileNavLink>
 
           <div className="h-px bg-white/5 my-4"></div>
+          
+          <div className="flex px-4 justify-between items-center mb-4">
+            <span className="text-white text-sm">Language</span>
+            <select
+                value={language}
+                onChange={(e) => changeLanguage(e.target.value)}
+                className="appearance-none bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-2 outline-none cursor-pointer"
+              >
+                <option value="de">🇩🇪 DE</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="ar">🇸🇦 AR</option>
+                <option value="fr">🇫🇷 FR</option>
+                <option value="uk">🇺🇦 UK</option>
+                <option value="ru">🇷🇺 RU</option>
+              </select>
+          </div>
 
           <div className="px-4 py-2">
-            <p className="text-lg font-bold text-white mb-1">{session.user.name}</p>
-            <p className="text-sm text-slate-500 mb-6">{session.user.email}</p>
+            <div className="flex items-center gap-3 mb-4">
+              {companyLogo && (
+                <img src={companyLogo} alt="Logo" className="w-10 h-10 rounded-full object-cover bg-white" />
+              )}
+              <div>
+                <p className="text-lg font-bold text-white mb-1">{session.user.name}</p>
+                <p className="text-sm text-slate-500">{session.user.email}</p>
+              </div>
+            </div>
             <button
               onClick={() => { signOut({ callbackUrl: "/" }); setMobileMenuOpen(false); }}
               className="w-full text-center bg-red-500/10 text-red-500 py-4 rounded-2xl hover:bg-red-500/20 font-bold border border-red-500/20 transition-all"
             >
-              Abmelden
+              {t("logout")}
             </button>
           </div>
         </div>
