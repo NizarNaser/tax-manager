@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const SettingsSchema = new mongoose.Schema({
-  userId: { type: String, required: true },
+  userId: { type: String, required: true, unique: true },
   companyName: String,
   bundesland: String,
   vatRate: Number,
@@ -11,6 +11,7 @@ const SettingsSchema = new mongoose.Schema({
   vatId: String,
   address: String,
   country: String,
+  currency: { type: String, default: "EUR" },
 });
 
 export default mongoose.models.Settings || mongoose.model("Settings", SettingsSchema);

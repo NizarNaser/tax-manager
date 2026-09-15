@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useLanguage } from "../../../components/LanguageContext";
+import { getCurrencySymbol } from "../../../utils/currency";
 
 export default function PrintInvoicePage() {
   const params = useParams();
@@ -52,6 +53,7 @@ export default function PrintInvoicePage() {
 
   // Calculate gross, net, vat
   const vatRate = settings.vatRate || 19;
+  const currencySymbol = getCurrencySymbol(settings.currency);
   const gross = invoice.amount;
   const net = gross / (1 + (vatRate / 100));
   const vatAmount = gross - net;
@@ -203,8 +205,8 @@ export default function PrintInvoicePage() {
                   {invoice.description && <p className="text-slate-500 text-sm mt-1 whitespace-pre-wrap">{invoice.description}</p>}
                 </td>
                 <td className="py-6 text-end text-slate-700">1</td>
-                <td className="py-6 text-end text-slate-700">{gross.toFixed(2)} €</td>
-                <td className="py-6 text-end font-bold text-slate-900">{gross.toFixed(2)} €</td>
+                <td className="py-6 text-end text-slate-700">{gross.toFixed(2)} {currencySymbol}</td>
+                <td className="py-6 text-end font-bold text-slate-900">{gross.toFixed(2)} {currencySymbol}</td>
               </tr>
             </tbody>
           </table>
@@ -215,15 +217,15 @@ export default function PrintInvoicePage() {
           <div className="w-full max-w-sm space-y-3">
             <div className="flex justify-between text-slate-600 text-sm gap-8">
               <span>{t("net_amount")}:</span>
-              <span>{net.toFixed(2)} €</span>
+              <span>{net.toFixed(2)} {currencySymbol}</span>
             </div>
             <div className="flex justify-between text-slate-600 text-sm border-b border-slate-200 pb-3 gap-8">
               <span>{t("vat")} ({vatRate}%):</span>
-              <span>{vatAmount.toFixed(2)} €</span>
+              <span>{vatAmount.toFixed(2)} {currencySymbol}</span>
             </div>
             <div className="flex justify-between text-xl font-black text-slate-900 pt-2 gap-8">
               <span>{t("gross_amount")}:</span>
-              <span>{gross.toFixed(2)} €</span>
+              <span>{gross.toFixed(2)} {currencySymbol}</span>
             </div>
           </div>
         </div>

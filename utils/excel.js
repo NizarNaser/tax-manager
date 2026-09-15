@@ -16,14 +16,12 @@ export async function generateMonthlyExcel(userId, year, month) {
   }).lean();
 
   const rows = invoices.map(inv => ({
-    invoiceNumber: inv.invoiceNumber,
-    supplier: inv.supplier,
+    type: inv.type,
+    title: inv.title,
     date: inv.date.toISOString().split("T")[0],
-    totalAmount: inv.totalAmount,
-    taxRate: inv.taxRate,
-    taxAmount: inv.taxAmount,
-    netAmount: inv.netAmount,
-    image: inv.invoiceImage || "",
+    amount: inv.amount,
+    description: inv.description || "",
+    image: inv.imageUrl || "",
   }));
 
   const worksheet = XLSX.utils.json_to_sheet(rows);

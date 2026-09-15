@@ -36,12 +36,11 @@ export async function POST(req) {
       data.companyLogo = result.secure_url;
     }
 
-    let settings = await Settings.findOne({ userId });
-    if (settings) {
-      settings = await Settings.findOneAndUpdate({ userId }, data, { new: true });
-    } else {
-      settings = await Settings.create({ ...data, userId });
-    }
+    const settings = await Settings.findOneAndUpdate(
+      { userId },
+      { ...data, userId },
+      { new: true, upsert: true }
+    );
 
     return new Response(JSON.stringify(settings), { status: 200 });
   } catch (err) {

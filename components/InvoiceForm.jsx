@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useLanguage } from "./LanguageContext";
+import { getCurrencySymbol } from "../utils/currency";
+
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCancel }) {
   const { t } = useLanguage();
@@ -12,6 +15,14 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [currencySymbol, setCurrencySymbol] = useState("€");
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => { if (data?.currency) setCurrencySymbol(getCurrencySymbol(data.currency)); })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (initialData) {
@@ -121,7 +132,7 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
           <label className={labelClasses}>{t("amount")}</label>
           <div className="relative">
             <input type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} className={inputClasses} required />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">€</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">{currencySymbol}</span>
           </div>
         </div>
       </div>
@@ -137,7 +148,16 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
           <input
             type="file"
             accept="image/*"
-            onChange={e => setImage(e.target.files[0])}
+            onChange={e => {
+              const file = e.target.files[0];
+              if (file && file.size > MAX_IMAGE_SIZE) {
+                alert(t("image_too_large") || "Die Datei ist zu groß (max. 5MB)");
+                e.target.value = "";
+                setImage(null);
+                return;
+              }
+              setImage(file);
+            }}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
             required={!initialData}
           />

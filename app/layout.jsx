@@ -3,7 +3,18 @@ import Navbar from '../components/Navbar';
 import Providers from '../components/Providers';
 import './globals.css';
 
-export const metadata = { title: 'Tax Invoices App' };
+export const metadata = {
+    title: 'Tax Invoices App',
+    manifest: '/site.webmanifest',
+    icons: {
+        icon: [
+            { url: '/favicon.ico' },
+            { url: '/icon0.svg', type: 'image/svg+xml' },
+            { url: '/icon1.png', type: 'image/png' },
+        ],
+        apple: '/apple-icon.png',
+    },
+};
 
 
 export default function RootLayout({ children }) {

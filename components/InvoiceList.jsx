@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { useLanguage } from "./LanguageContext";
+import { getCurrencySymbol } from "../utils/currency";
 
 export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
   const { t } = useLanguage();
   const [list, setList] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState("");
+  const [currencySymbol, setCurrencySymbol] = useState("€");
 
   useEffect(() => {
     if (Array.isArray(invoices)) {
@@ -18,6 +20,13 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
       setList([]);
     }
   }, [invoices]);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => { if (data?.currency) setCurrencySymbol(getCurrencySymbol(data.currency)); })
+      .catch(() => {});
+  }, []);
 
   const downloadExcel = async () => {
     const ExcelJS = (await import("exceljs")).default;
@@ -161,7 +170,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
 
                 <div className="flex justify-between items-center py-2 border-y border-white/5">
                   <p className="text-sm text-slate-400">Betrag:</p>
-                  <p className="text-xl font-black text-white">{inv.amount} €</p>
+                  <p className="text-xl font-black text-white">{inv.amount} {currencySymbol}</p>
                 </div>
 
                 {inv.description && (
@@ -217,7 +226,7 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
                       </span>
                     </td>
                     <td className="p-6 font-bold text-white group-hover:text-yellow-500 transition-colors">{inv.title}</td>
-                    <td className="p-6 font-black text-lg text-white">{inv.amount} €</td>
+                    <td className="p-6 font-black text-lg text-white">{inv.amount} {currencySymbol}</td>
                     <td className="p-6 text-slate-400">
                       {inv.date ? new Date(inv.date).toLocaleDateString('de-DE') : ""}
                     </td>

@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "../../components/LanguageContext";
+import { CURRENCIES } from "../../utils/currency";
+
+const MAX_LOGO_SIZE = 5 * 1024 * 1024;
 
 export default function SettingsPage() {
   const { t } = useLanguage();
@@ -12,6 +15,7 @@ export default function SettingsPage() {
   const [companyLogo, setCompanyLogo] = useState("");
   const [address, setAddress] = useState("");
   const [country, setCountry] = useState("");
+  const [currency, setCurrency] = useState("EUR");
   const [taxId, setTaxId] = useState("");
   const [vatId, setVatId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,6 +34,7 @@ export default function SettingsPage() {
         setCompanyLogo(data.companyLogo || "");
         setAddress(data.address || "");
         setCountry(data.country || "");
+        setCurrency(data.currency || "EUR");
         setTaxId(data.taxId || "");
         setVatId(data.vatId || "");
       }
@@ -40,6 +45,12 @@ export default function SettingsPage() {
   const handleLogoUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    if (file.size > MAX_LOGO_SIZE) {
+      alert(t("image_too_large") || "Die Datei ist zu groß (max. 5MB)");
+      e.target.value = "";
+      return;
+    }
 
     setLogoUploading(true);
     try {
@@ -67,7 +78,7 @@ export default function SettingsPage() {
       const res = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ companyName, bundesland, vatRate, corporateTaxRate, companyLogo, address, country, taxId, vatId }),
+        body: JSON.stringify({ companyName, bundesland, vatRate, corporateTaxRate, companyLogo, address, country, taxId, vatId, currency }),
       });
       
       if (res.ok) {
@@ -127,6 +138,15 @@ export default function SettingsPage() {
             <div className="space-y-2">
               <label className={labelClasses}>{t("country") || "Land"}</label>
               <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} className={inputClasses} required />
+            </div>
+
+            <div className="space-y-2">
+              <label className={labelClasses}>{t("currency") || "Währung"}</label>
+              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className={inputClasses}>
+                {CURRENCIES.map(c => (
+                  <option key={c.code} value={c.code}>{c.code} ({c.symbol})</option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-2 md:col-span-2">

@@ -6,11 +6,13 @@ import { jsPDF } from "jspdf";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { useLanguage } from "../../components/LanguageContext";
+import { getCurrencySymbol } from "../../utils/currency";
 
 export default function ReportsPage() {
   const { t } = useLanguage();
   const [invoices, setInvoices] = useState([]);
-  const [settings, setSettings] = useState({ vatRate: 19, corporateTaxRate: 15 });
+  const [settings, setSettings] = useState({ vatRate: 19, corporateTaxRate: 15, currency: "EUR" });
+  const currencySymbol = getCurrencySymbol(settings.currency);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
   const [openLightbox, setOpenLightbox] = useState(false);
@@ -112,11 +114,11 @@ export default function ReportsPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ReportStatCard title={t("total_income")} value={totals.income} color="green" icon="income" />
-        <ReportStatCard title={t("total_expense")} value={totals.expense} color="red" icon="expense" />
-        <ReportStatCard title={t("net_profit")} value={netProfit} color="blue" icon="profit" />
-        <ReportStatCard title={`${t("vat")} - ${settings.vatRate}%`} value={vat} color="yellow" icon="tax" />
-        <ReportStatCard title={`${t("corporate_tax")} (${settings.corporateTaxRate}%)`} value={corporateTax} color="purple" icon="settings" />
+        <ReportStatCard title={t("total_income")} value={totals.income} color="green" icon="income" currency={currencySymbol} />
+        <ReportStatCard title={t("total_expense")} value={totals.expense} color="red" icon="expense" currency={currencySymbol} />
+        <ReportStatCard title={t("net_profit")} value={netProfit} color="blue" icon="profit" currency={currencySymbol} />
+        <ReportStatCard title={`${t("vat")} - ${settings.vatRate}%`} value={vat} color="yellow" icon="tax" currency={currencySymbol} />
+        <ReportStatCard title={`${t("corporate_tax")} (${settings.corporateTaxRate}%)`} value={corporateTax} color="purple" icon="settings" currency={currencySymbol} />
       </div>
 
       <div className="glass rounded-[2.5rem] border border-white/5 overflow-x-auto overflow-hidden">
@@ -139,7 +141,7 @@ export default function ReportsPage() {
                   </span>
                 </td>
                 <td className="p-6 font-bold text-white">{inv.title}</td>
-                <td className="p-6 font-black text-white">{inv.amount} €</td>
+                <td className="p-6 font-black text-white">{inv.amount} {currencySymbol}</td>
                 <td className="p-6 text-slate-400">{new Date(inv.date).toLocaleDateString('de-DE')}</td>
                 <td className="p-6">
                   <div className="flex justify-center">
@@ -171,7 +173,7 @@ export default function ReportsPage() {
   );
 }
 
-function ReportStatCard({ title, value, color, icon }) {
+function ReportStatCard({ title, value, color, icon, currency }) {
   const colors = {
     green: "from-green-500/10 border-green-500/20 text-green-500",
     red: "from-red-500/10 border-red-500/20 text-red-500",
@@ -183,7 +185,7 @@ function ReportStatCard({ title, value, color, icon }) {
   return (
     <div className={`glass p-8 rounded-[2rem] border bg-gradient-to-br transition-all hover:-translate-y-1 text-left ${colors[color]}`}>
       <p className="text-slate-400 font-bold mb-2">{title}</p>
-      <p className="text-4xl font-black text-white">{value.toFixed(2)} €</p>
+      <p className="text-4xl font-black text-white">{value.toFixed(2)} {currency}</p>
     </div>
   )
 }
