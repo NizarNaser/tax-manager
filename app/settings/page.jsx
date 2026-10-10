@@ -144,7 +144,7 @@ export default function SettingsPage() {
               <label className={labelClasses}>{t("currency") || "Währung"}</label>
               <select value={currency} onChange={(e) => setCurrency(e.target.value)} className={inputClasses}>
                 {CURRENCIES.map(c => (
-                  <option key={c.code} value={c.code}>{c.code} ({c.symbol})</option>
+                  <option key={c.code} value={c.code} className="bg-[#05070A] text-white">{c.code} ({c.symbol})</option>
                 ))}
               </select>
             </div>
