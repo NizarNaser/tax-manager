@@ -2,6 +2,7 @@ import dbConnect from "../../../../lib/db";
 import Invoice from "../../../../models/Invoice";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/authOptions";
+import { serializeInvoice } from "../../../../utils/serialize";
 
 export async function GET(req, { params }) {
   const session = await getServerSession(authOptions);
@@ -11,16 +12,15 @@ export async function GET(req, { params }) {
   const userId = session.user.email;
   await dbConnect();
 
-  // params أصبح Promise، لذلك نفتحها قبل الاستخدام
-  const { id } = await params; // أو استخدام destructuring مع await
+  const { id } = await params;
 
   try {
-    const invoice = await Invoice.findOne({ _id: id, userId }).lean();
+    const invoice = await Invoice.findOne({ where: { id, userId } });
     if (!invoice) {
       return new Response(JSON.stringify({ message: "Invoice not found" }), { status: 404 });
     }
 
-    return new Response(JSON.stringify(invoice), { status: 200 });
+    return new Response(JSON.stringify(serializeInvoice(invoice)), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ message: error.message }), { status: 500 });
   }
@@ -37,13 +37,15 @@ export async function PUT(req, { params }) {
 
   try {
     const data = await req.json();
-    const updatedInvoice = await Invoice.findOneAndUpdate({ _id: id, userId }, data, { new: true });
+    const invoice = await Invoice.findOne({ where: { id, userId } });
 
-    if (!updatedInvoice) {
+    if (!invoice) {
       return new Response(JSON.stringify({ message: "Invoice not found" }), { status: 404 });
     }
 
-    return new Response(JSON.stringify(updatedInvoice), { status: 200 });
+    await invoice.update(data);
+
+    return new Response(JSON.stringify(serializeInvoice(invoice)), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ message: error.message }), { status: 500 });
   }
@@ -59,11 +61,13 @@ export async function DELETE(req, { params }) {
   const { id } = await params;
 
   try {
-    const deletedInvoice = await Invoice.findOneAndDelete({ _id: id, userId });
+    const invoice = await Invoice.findOne({ where: { id, userId } });
 
-    if (!deletedInvoice) {
+    if (!invoice) {
       return new Response(JSON.stringify({ message: "Invoice not found" }), { status: 404 });
     }
+
+    await invoice.destroy();
 
     return new Response(JSON.stringify({ message: "Invoice deleted successfully" }), { status: 200 });
   } catch (error) {

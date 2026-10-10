@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    output: "standalone",
+    experimental: {
+        serverComponentsExternalPackages: ["sequelize", "mysql2"],
+    },
     webpack: (config) => {
         config.resolve.fallback = {
             ...config.resolve.fallback,

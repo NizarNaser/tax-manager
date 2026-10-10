@@ -1,17 +1,18 @@
-import mongoose from "mongoose";
+import { DataTypes } from "sequelize";
+import sequelize from "../lib/sequelize";
 
-const SettingsSchema = new mongoose.Schema({
-  userId: { type: String, required: true, unique: true },
-  companyName: String,
-  bundesland: String,
-  vatRate: Number,
-  corporateTaxRate: Number,
-  companyLogo: String,
-  taxId: String,
-  vatId: String,
-  address: String,
-  country: String,
-  currency: { type: String, default: "EUR" },
+const Settings = sequelize.define("Settings", {
+  userId: { type: DataTypes.STRING, allowNull: false, unique: true },
+  companyName: DataTypes.STRING,
+  bundesland: DataTypes.STRING,
+  vatRate: DataTypes.FLOAT,
+  corporateTaxRate: DataTypes.FLOAT,
+  companyLogo: DataTypes.STRING(500),
+  taxId: DataTypes.STRING,
+  vatId: DataTypes.STRING,
+  address: DataTypes.STRING,
+  country: DataTypes.STRING,
+  currency: { type: DataTypes.STRING, defaultValue: "EUR" },
 });
 
-export default mongoose.models.Settings || mongoose.model("Settings", SettingsSchema);
+export default Settings;

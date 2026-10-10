@@ -1,6 +1,6 @@
 import dbConnect from "../../../lib/db";
 import Settings from "../../../models/Settings";
-import cloudinary from "../../../lib/cloudinary";
+import { saveBase64Image } from "../../../lib/localUpload";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/authOptions";
 
@@ -12,7 +12,7 @@ export async function GET() {
   const userId = session.user.email;
   try {
     await dbConnect();
-    const settings = await Settings.findOne({ userId });
+    const settings = await Settings.findOne({ where: { userId } });
     return new Response(JSON.stringify(settings || {}), { status: 200 });
   } catch (err) {
     console.error(err);
@@ -32,15 +32,15 @@ export async function POST(req) {
 
     // Check if companyLogo is a base64 string
     if (data.companyLogo && data.companyLogo.startsWith("data:image")) {
-      const result = await cloudinary.uploader.upload(data.companyLogo, { folder: "tax_settings" });
-      data.companyLogo = result.secure_url;
+      data.companyLogo = await saveBase64Image(data.companyLogo, "logos");
     }
 
-    const settings = await Settings.findOneAndUpdate(
-      { userId },
-      { ...data, userId },
-      { new: true, upsert: true }
-    );
+    let settings = await Settings.findOne({ where: { userId } });
+    if (settings) {
+      await settings.update(data);
+    } else {
+      settings = await Settings.create({ ...data, userId });
+    }
 
     return new Response(JSON.stringify(settings), { status: 200 });
   } catch (err) {
