@@ -101,7 +101,12 @@ export const dictionary = {
     net_amount: "Nettobetrag",
     gross_amount: "Gesamtbetrag",
     legal_notice1: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig.",
-    legal_notice2: "According to applicable EU directives, this document is computer-generated and valid without a signature."
+    legal_notice2: "According to applicable EU directives, this document is computer-generated and valid without a signature.",
+    install_title: "App installieren",
+    install_desc: "Installieren Sie TaxManager auf Ihrem Startbildschirm für schnelleren Zugriff.",
+    install_now: "Jetzt installieren",
+    install_ios_hint: "Tippen Sie auf Teilen, dann auf \"Zum Home-Bildschirm\"",
+    install_dismiss: "Nicht jetzt"
   },
   en: {
     dashboard: "Dashboard",
@@ -205,7 +210,12 @@ export const dictionary = {
     net_amount: "Net Amount",
     gross_amount: "Gross Amount",
     legal_notice1: "According to applicable EU directives, this document is computer-generated and valid without a signature.",
-    legal_notice2: "Dieses Dokument wurde maschinell erstellt und ist ohne Unterschrift gültig."
+    legal_notice2: "Dieses Dokument wurde maschinell erstellt und ist ohne Unterschrift gültig.",
+    install_title: "Install the App",
+    install_desc: "Install TaxManager on your home screen for faster access.",
+    install_now: "Install Now",
+    install_ios_hint: "Tap Share, then \"Add to Home Screen\"",
+    install_dismiss: "Not now"
   },
   ar: {
     dashboard: "لوحة التحكم",
@@ -309,7 +319,12 @@ export const dictionary = {
     net_amount: "المبلغ الصافي",
     gross_amount: "المبلغ الإجمالي",
     legal_notice1: "وفقًا لتوجيهات الاتحاد الأوروبي المعمول بها، تم إنشاء هذا المستند آليًا وهو صالح بدون توقيع.",
-    legal_notice2: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig."
+    legal_notice2: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig.",
+    install_title: "تثبيت التطبيق",
+    install_desc: "ثبّت TaxManager على شاشتك الرئيسية للوصول السريع.",
+    install_now: "تثبيت الآن",
+    install_ios_hint: "اضغط على زر المشاركة، ثم \"إضافة إلى الشاشة الرئيسية\"",
+    install_dismiss: "ليس الآن"
   },
   fr: {
     dashboard: "Tableau de bord",
@@ -413,7 +428,12 @@ export const dictionary = {
     net_amount: "Montant Net",
     gross_amount: "Montant Brut",
     legal_notice1: "Conformément aux directives européennes applicables, ce document est généré par ordinateur et est valable sans signature.",
-    legal_notice2: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig."
+    legal_notice2: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig.",
+    install_title: "Installer l'application",
+    install_desc: "Installez TaxManager sur votre écran d'accueil pour un accès plus rapide.",
+    install_now: "Installer maintenant",
+    install_ios_hint: "Appuyez sur Partager, puis \"Ajouter à l'écran d'accueil\"",
+    install_dismiss: "Pas maintenant"
   },
   uk: {
     dashboard: "Дашборд",
@@ -517,7 +537,12 @@ export const dictionary = {
     net_amount: "Чиста сума",
     gross_amount: "Загальна сума",
     legal_notice1: "Відповідно до чинних директив ЄС, цей документ створено комп'ютером і він є дійсним без підпису.",
-    legal_notice2: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig."
+    legal_notice2: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig.",
+    install_title: "Встановити додаток",
+    install_desc: "Встановіть TaxManager на головний екран для швидшого доступу.",
+    install_now: "Встановити зараз",
+    install_ios_hint: "Натисніть \"Поділитися\", потім \"На екран «Домівка»\"",
+    install_dismiss: "Не зараз"
   },
   ru: {
     dashboard: "Дашборд",
@@ -621,6 +646,11 @@ export const dictionary = {
     net_amount: "Сумма нетто",
     gross_amount: "Общая сумма",
     legal_notice1: "В соответствии с применимыми директивами ЕС, этот документ сгенерирован на компьютере и действителен без подписи.",
-    legal_notice2: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig."
+    legal_notice2: "Gemäß den geltenden EU-Richtlinien ist dieses Dokument maschinell erstellt und ohne Unterschrift gültig.",
+    install_title: "Установить приложение",
+    install_desc: "Установите TaxManager на главный экран для быстрого доступа.",
+    install_now: "Установить сейчас",
+    install_ios_hint: "Нажмите \"Поделиться\", затем \"На экран «Домой»\"",
+    install_dismiss: "Не сейчас"
   }
 };

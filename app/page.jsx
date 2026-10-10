@@ -2,6 +2,7 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useLanguage } from "../components/LanguageContext";
+import InstallPrompt from "../components/InstallPrompt";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -20,6 +21,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh]">
+      <InstallPrompt />
       {!session ? (
         <div className="w-full max-w-5xl flex flex-col md:flex-row items-center gap-12 py-12">
           {/* Hero Section */}

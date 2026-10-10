@@ -25,11 +25,20 @@ export default function Navbar() {
   }, [session]);
 
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const isRTL = language === "ar";
+
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   if (!session) return null;
 
   return (
-    <nav className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+    <>
+    <nav className="bg-black/40 backdrop-blur-xl border-b border-white/5 fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center gap-4">
@@ -106,8 +115,8 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed top-[80px] left-0 h-[calc(100vh-80px)] w-full bg-[#05070A]/95 backdrop-blur-2xl transform transition-transform duration-500 ease-in-out z-40 border-r border-white/5 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`md:hidden fixed top-[80px] ${isRTL ? "right-0" : "left-0"} h-[calc(100dvh-80px)] w-full bg-[#05070A]/95 backdrop-blur-2xl transform transition-transform duration-500 ease-in-out z-40 border-white/5 ${isRTL ? "border-l" : "border-r"} ${mobileMenuOpen ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full"
+          } ${mobileMenuOpen ? "" : "pointer-events-none"}`}
       >
         <div className="p-6 flex flex-col space-y-4">
           <MobileNavLink href="/dashboard" onClick={() => setMobileMenuOpen(false)}>{t("dashboard")}</MobileNavLink>
@@ -154,6 +163,8 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+    <div className="h-20" aria-hidden="true" />
+    </>
   );
 }
 
