@@ -180,12 +180,18 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
                 <div className="flex items-center justify-between mt-2">
                   {inv.imageUrl ? (
                     <div className="flex items-center gap-3">
-                      <img
-                        src={inv.imageUrl}
-                        alt="Rechnung"
-                        className="w-12 h-12 object-cover rounded-xl cursor-pointer border border-white/10 hover:border-yellow-500 transition-all"
+                      <button
+                        type="button"
                         onClick={() => handleOpenImage(inv.imageUrl)}
-                      />
+                        aria-label={`${t("image") || "Bild"}: ${inv.title}`}
+                        className="shrink-0 rounded-xl border border-white/10 hover:border-yellow-500 transition-all"
+                      >
+                        <img
+                          src={inv.imageUrl}
+                          alt=""
+                          className="w-12 h-12 object-cover rounded-xl"
+                        />
+                      </button>
                       <button
                         onClick={() => downloadImageHelper(inv)}
                         className="text-blue-400 text-xs font-bold hover:text-blue-300 underline underline-offset-4"
@@ -235,12 +241,18 @@ export default function InvoiceList({ invoices = [], onEdit, onDelete }) {
                       <div className="flex flex-col items-center gap-2">
                         {inv.imageUrl ? (
                           <>
-                            <img
-                              src={inv.imageUrl}
-                              alt="Rechnung"
-                              className="w-12 h-12 object-cover rounded-xl cursor-pointer border border-white/10 hover:border-yellow-500 hover:scale-110 transition-all shadow-lg"
+                            <button
+                              type="button"
                               onClick={() => handleOpenImage(inv.imageUrl)}
-                            />
+                              aria-label={`${t("image") || "Bild"}: ${inv.title}`}
+                              className="rounded-xl border border-white/10 hover:border-yellow-500 hover:scale-110 transition-all shadow-lg"
+                            >
+                              <img
+                                src={inv.imageUrl}
+                                alt=""
+                                className="w-12 h-12 object-cover rounded-xl"
+                              />
+                            </button>
                             <button
                               className="text-blue-400 text-[10px] font-bold hover:text-blue-300 transition-colors"
                               onClick={() => downloadImageHelper(inv)}

@@ -99,8 +99,9 @@ export default function InvoicesPage() {
         <div className="flex flex-col lg:flex-row gap-8 items-end">
           <div className="flex-1 w-full grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-300 ml-2">{t("from_date")}</label>
+              <label htmlFor="from-date" className="block text-sm font-bold text-slate-300 ml-2">{t("from_date")}</label>
               <input
+                id="from-date"
                 type="date"
                 value={fromDate}
                 onChange={e => setFromDate(e.target.value)}
@@ -108,8 +109,9 @@ export default function InvoicesPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-300 ml-2">{t("to_date")}</label>
+              <label htmlFor="to-date" className="block text-sm font-bold text-slate-300 ml-2">{t("to_date")}</label>
               <input
+                id="to-date"
                 type="date"
                 value={toDate}
                 onChange={e => setToDate(e.target.value)}

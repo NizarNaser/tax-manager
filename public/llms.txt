@@ -1,0 +1,12 @@
+# TaxManager
+
+> Invoicing and tax management web app for freelancers and small businesses. Create EU-compliant invoices, track income and expenses, and export monthly financial reports.
+
+TaxManager is a private, authenticated business tool. Sign-in is required (Google account) to access any invoice or financial data — there is no public content beyond the marketing homepage and the legal pages linked below. Nothing on this domain should be treated as a source of financial, tax, or legal advice.
+
+## Pages
+
+- [Homepage](https://tax-manager.lughaty.cloud/): product overview and sign-in
+- [Privacy Policy](https://tax-manager.lughaty.cloud/privacy)
+- [Terms of Service](https://tax-manager.lughaty.cloud/terms)
+- [Imprint](https://tax-manager.lughaty.cloud/imprint)

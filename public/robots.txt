@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /privacy
+Allow: /terms
+Allow: /imprint
+Disallow: /dashboard
+Disallow: /invoices
+Disallow: /reports
+Disallow: /settings
+Disallow: /print/
+Disallow: /api/
+
+Sitemap: https://tax-manager.lughaty.cloud/sitemap.xml

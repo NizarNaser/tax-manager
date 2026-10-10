@@ -99,11 +99,12 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
     <form onSubmit={handleSubmit} className="space-y-8 text-left">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-2">
-          <label className={labelClasses}>{t("transaction_type")}</label>
-          <div className="grid grid-cols-2 gap-4">
+          <span id="transaction-type-label" className={labelClasses}>{t("transaction_type")}</span>
+          <div role="group" aria-labelledby="transaction-type-label" className="grid grid-cols-2 gap-4">
             <button
               type="button"
               onClick={() => setType("income")}
+              aria-pressed={type === "income"}
               className={`py-4 rounded-2xl font-bold transition-all border ${type === 'income' ? 'bg-green-500 text-black border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.3)]' : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20'}`}
             >
               {t("income")}
@@ -111,6 +112,7 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
             <button
               type="button"
               onClick={() => setType("expense")}
+              aria-pressed={type === "expense"}
               className={`py-4 rounded-2xl font-bold transition-all border ${type === 'expense' ? 'bg-red-500 text-white border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)]' : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20'}`}
             >
               {t("expense")}
@@ -119,33 +121,34 @@ export default function InvoiceForm({ onAdd, initialData = null, onUpdate, onCan
         </div>
 
         <div className="space-y-2">
-          <label className={labelClasses}>{t("date")}</label>
-          <input type="date" value={date} onChange={e => setDate(e.target.value)} className={inputClasses} required />
+          <label htmlFor="invoice-date" className={labelClasses}>{t("date")}</label>
+          <input id="invoice-date" type="date" value={date} onChange={e => setDate(e.target.value)} className={inputClasses} required />
         </div>
 
         <div className="space-y-2">
-          <label className={labelClasses}>{t("invoice_title")}</label>
-          <input type="text" placeholder="" value={title} onChange={e => setTitle(e.target.value)} className={inputClasses} required />
+          <label htmlFor="invoice-title" className={labelClasses}>{t("invoice_title")}</label>
+          <input id="invoice-title" type="text" placeholder="" value={title} onChange={e => setTitle(e.target.value)} className={inputClasses} required />
         </div>
 
         <div className="space-y-2">
-          <label className={labelClasses}>{t("amount")}</label>
+          <label htmlFor="invoice-amount" className={labelClasses}>{t("amount")}</label>
           <div className="relative">
-            <input type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} className={inputClasses} required />
+            <input id="invoice-amount" type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} className={inputClasses} required />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">{currencySymbol}</span>
           </div>
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className={labelClasses}>{t("description_opt")}</label>
-        <textarea placeholder="" value={description} onChange={e => setDescription(e.target.value)} className={`${inputClasses} h-32 resize-none`} />
+        <label htmlFor="invoice-description" className={labelClasses}>{t("description_opt")}</label>
+        <textarea id="invoice-description" placeholder="" value={description} onChange={e => setDescription(e.target.value)} className={`${inputClasses} h-32 resize-none`} />
       </div>
 
       <div className="space-y-4">
-        <label className={labelClasses}>{t("invoice_image")} {initialData && ""}</label>
+        <label htmlFor="invoice-image" className={labelClasses}>{t("invoice_image")} {initialData && ""}</label>
         <div className="relative group">
           <input
+            id="invoice-image"
             type="file"
             accept="image/*"
             onChange={e => {

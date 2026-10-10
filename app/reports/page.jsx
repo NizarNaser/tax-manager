@@ -94,12 +94,12 @@ export default function ReportsPage() {
 
       <div className="glass p-8 rounded-[2.5rem] border border-white/5 flex flex-wrap items-end gap-6">
         <div className="flex-1 min-w-[200px] space-y-2">
-          <label className="block text-sm font-bold text-slate-400 ml-2 uppercase tracking-widest text-left">{t("month")}</label>
-          <input type="number" min="1" max="12" value={month} onChange={(e) => setMonth(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-yellow-500 outline-none transition-all appearance-none text-left font-bold text-xl" />
+          <label htmlFor="report-month" className="block text-sm font-bold text-slate-400 ml-2 uppercase tracking-widest text-left">{t("month")}</label>
+          <input id="report-month" type="number" min="1" max="12" value={month} onChange={(e) => setMonth(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-yellow-500 outline-none transition-all appearance-none text-left font-bold text-xl" />
         </div>
         <div className="flex-1 min-w-[200px] space-y-2">
-          <label className="block text-sm font-bold text-slate-400 ml-2 uppercase tracking-widest text-left">{t("year")}</label>
-          <input type="number" min="2000" max="2100" value={year} onChange={(e) => setYear(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-yellow-500 outline-none transition-all appearance-none text-left font-bold text-xl" />
+          <label htmlFor="report-year" className="block text-sm font-bold text-slate-400 ml-2 uppercase tracking-widest text-left">{t("year")}</label>
+          <input id="report-year" type="number" min="2000" max="2100" value={year} onChange={(e) => setYear(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-yellow-500 outline-none transition-all appearance-none text-left font-bold text-xl" />
         </div>
         <div className="flex gap-4 w-full md:w-auto">
           <button onClick={downloadExcel} className="flex-1 md:flex-none bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
@@ -146,12 +146,18 @@ export default function ReportsPage() {
                 <td className="p-6">
                   <div className="flex justify-center">
                     {inv.imageUrl && (
-                      <img
-                        src={inv.imageUrl}
-                        alt="Rechnung"
-                        className="w-12 h-12 object-cover rounded-xl cursor-pointer border border-white/10 hover:border-yellow-500 transition-all"
+                      <button
+                        type="button"
                         onClick={() => { setLightboxIndex(i); setOpenLightbox(true); }}
-                      />
+                        aria-label={`${t("image") || "Bild"}: ${inv.title}`}
+                        className="rounded-xl border border-white/10 hover:border-yellow-500 transition-all"
+                      >
+                        <img
+                          src={inv.imageUrl}
+                          alt=""
+                          className="w-12 h-12 object-cover rounded-xl"
+                        />
+                      </button>
                     )}
                   </div>
                 </td>

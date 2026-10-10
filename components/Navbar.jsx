@@ -62,6 +62,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-6">
             <div className="relative">
               <select
+                aria-label="Language"
                 value={language}
                 onChange={(e) => changeLanguage(e.target.value)}
                 className="appearance-none bg-white/5 border border-white/10 hover:border-white/20 text-white text-sm rounded-xl px-4 py-2 pr-8 outline-none cursor-pointer transition-all focus:ring-2 focus:ring-yellow-500/50"
@@ -100,8 +101,14 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
-            <button onClick={toggleMenu} className="text-slate-400 hover:text-white p-2 transition-colors">
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <button
+              onClick={toggleMenu}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={mobileMenuOpen ? (t("close_menu") || "Close menu") : (t("open_menu") || "Open menu")}
+              className="text-slate-400 hover:text-white p-2 transition-colors"
+            >
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                 {mobileMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -115,8 +122,10 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
+        id="mobile-menu"
         className={`md:hidden fixed top-[80px] ${isRTL ? "right-0" : "left-0"} h-[calc(100dvh-80px)] w-full bg-[#05070A]/95 backdrop-blur-2xl transform transition-transform duration-500 ease-in-out z-40 border-white/5 ${isRTL ? "border-l" : "border-r"} ${mobileMenuOpen ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full"
           } ${mobileMenuOpen ? "" : "pointer-events-none"}`}
+        {...(!mobileMenuOpen && { inert: "" })}
       >
         <div className="p-6 flex flex-col space-y-4">
           <MobileNavLink href="/dashboard" onClick={() => setMobileMenuOpen(false)}>{t("dashboard")}</MobileNavLink>
@@ -128,11 +137,12 @@ export default function Navbar() {
           <div className="h-px bg-white/5 my-4"></div>
           
           <div className="flex px-4 justify-between items-center mb-4">
-            <span className="text-white text-sm">Language</span>
+            <span id="mobile-language-label" className="text-white text-sm">Language</span>
             <select
+                aria-labelledby="mobile-language-label"
                 value={language}
                 onChange={(e) => changeLanguage(e.target.value)}
-                className="appearance-none bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-2 outline-none cursor-pointer"
+                className="appearance-none bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-2 outline-none cursor-pointer focus:ring-2 focus:ring-yellow-500/50"
               >
                 <option value="de" className="bg-[#05070A] text-white">🇩🇪 DE</option>
                 <option value="en" className="bg-[#05070A] text-white">🇬🇧 EN</option>

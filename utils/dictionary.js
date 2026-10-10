@@ -107,7 +107,9 @@ export const dictionary = {
     install_now: "Jetzt installieren",
     install_ios_hint: "Tippen Sie auf Teilen, dann auf \"Zum Home-Bildschirm\"",
     install_android_hint: "Tippen Sie auf ⋮ oben rechts, dann auf \"App installieren\"",
-    install_dismiss: "Nicht jetzt"
+    install_dismiss: "Nicht jetzt",
+    open_menu: "Menü öffnen",
+    close_menu: "Menü schließen"
   },
   en: {
     dashboard: "Dashboard",
@@ -217,7 +219,9 @@ export const dictionary = {
     install_now: "Install Now",
     install_ios_hint: "Tap Share, then \"Add to Home Screen\"",
     install_android_hint: "Tap ⋮ at the top right, then \"Install app\"",
-    install_dismiss: "Not now"
+    install_dismiss: "Not now",
+    open_menu: "Open menu",
+    close_menu: "Close menu"
   },
   ar: {
     dashboard: "لوحة التحكم",
@@ -327,7 +331,9 @@ export const dictionary = {
     install_now: "تثبيت الآن",
     install_ios_hint: "اضغط على زر المشاركة، ثم \"إضافة إلى الشاشة الرئيسية\"",
     install_android_hint: "اضغط على ⋮ أعلى الشاشة، ثم \"تثبيت التطبيق\"",
-    install_dismiss: "ليس الآن"
+    install_dismiss: "ليس الآن",
+    open_menu: "فتح القائمة",
+    close_menu: "إغلاق القائمة"
   },
   fr: {
     dashboard: "Tableau de bord",
@@ -437,7 +443,9 @@ export const dictionary = {
     install_now: "Installer maintenant",
     install_ios_hint: "Appuyez sur Partager, puis \"Ajouter à l'écran d'accueil\"",
     install_android_hint: "Appuyez sur ⋮ en haut à droite, puis \"Installer l'application\"",
-    install_dismiss: "Pas maintenant"
+    install_dismiss: "Pas maintenant",
+    open_menu: "Ouvrir le menu",
+    close_menu: "Fermer le menu"
   },
   uk: {
     dashboard: "Дашборд",
@@ -547,7 +555,9 @@ export const dictionary = {
     install_now: "Встановити зараз",
     install_ios_hint: "Натисніть \"Поділитися\", потім \"На екран «Домівка»\"",
     install_android_hint: "Натисніть ⋮ вгорі справа, потім \"Установити додаток\"",
-    install_dismiss: "Не зараз"
+    install_dismiss: "Не зараз",
+    open_menu: "Відкрити меню",
+    close_menu: "Закрити меню"
   },
   ru: {
     dashboard: "Дашборд",
@@ -657,6 +667,8 @@ export const dictionary = {
     install_now: "Установить сейчас",
     install_ios_hint: "Нажмите \"Поделиться\", затем \"На экран «Домой»\"",
     install_android_hint: "Нажмите ⋮ вверху справа, затем \"Установить приложение\"",
-    install_dismiss: "Не сейчас"
+    install_dismiss: "Не сейчас",
+    open_menu: "Открыть меню",
+    close_menu: "Закрыть меню"
   }
 };

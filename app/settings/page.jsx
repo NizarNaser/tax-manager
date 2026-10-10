@@ -111,13 +111,13 @@ export default function SettingsPage() {
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4 md:col-span-2">
-              <label className={labelClasses}>{t("company_logo") || "Firmenlogo"}</label>
+              <label htmlFor="company-logo-input" className={labelClasses}>{t("company_logo") || "Firmenlogo"}</label>
               <div className="flex items-center gap-6">
                 {companyLogo && (
-                  <img src={companyLogo} alt="Logo" className="w-24 h-24 object-contain bg-white rounded-xl" />
+                  <img src={companyLogo} alt={t("company_logo") || "Firmenlogo"} className="w-24 h-24 object-contain bg-white rounded-xl" />
                 )}
                 <div className="relative">
-                  <input type="file" accept="image/*" onChange={handleLogoUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                  <input id="company-logo-input" type="file" accept="image/*" onChange={handleLogoUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                   <div className="bg-white/5 border border-white/10 hover:border-yellow-500 text-white px-6 py-3 rounded-xl transition-all cursor-pointer font-bold text-sm">
                     {logoUploading ? t("processing") : (companyLogo ? (t("change_logo") || "Logo ändern") : (t("upload_logo") || "Logo hochladen"))}
                   </div>
@@ -126,23 +126,23 @@ export default function SettingsPage() {
             </div>
 
             <div className="space-y-2">
-              <label className={labelClasses}>{t("company_name")}</label>
-              <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} className={inputClasses} required />
+              <label htmlFor="company-name" className={labelClasses}>{t("company_name")}</label>
+              <input id="company-name" type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} className={inputClasses} required />
             </div>
 
             <div className="space-y-2">
-              <label className={labelClasses}>{t("state")}</label>
-              <input type="text" value={bundesland} onChange={(e) => setBundesland(e.target.value)} className={inputClasses} required />
+              <label htmlFor="state" className={labelClasses}>{t("state")}</label>
+              <input id="state" type="text" value={bundesland} onChange={(e) => setBundesland(e.target.value)} className={inputClasses} required />
             </div>
 
             <div className="space-y-2">
-              <label className={labelClasses}>{t("country") || "Land"}</label>
-              <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} className={inputClasses} required />
+              <label htmlFor="country" className={labelClasses}>{t("country") || "Land"}</label>
+              <input id="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} className={inputClasses} required />
             </div>
 
             <div className="space-y-2">
-              <label className={labelClasses}>{t("currency") || "Währung"}</label>
-              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className={inputClasses}>
+              <label htmlFor="currency" className={labelClasses}>{t("currency") || "Währung"}</label>
+              <select id="currency" value={currency} onChange={(e) => setCurrency(e.target.value)} className={inputClasses}>
                 {CURRENCIES.map(c => (
                   <option key={c.code} value={c.code} className="bg-[#05070A] text-white">{c.code} ({c.symbol})</option>
                 ))}
@@ -150,32 +150,32 @@ export default function SettingsPage() {
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <label className={labelClasses}>{t("address") || "Adresse"}</label>
-              <input type="text" placeholder="Musterstraße 1, 12345 Musterstadt" value={address} onChange={(e) => setAddress(e.target.value)} className={inputClasses} />
+              <label htmlFor="address" className={labelClasses}>{t("address") || "Adresse"}</label>
+              <input id="address" type="text" placeholder="Musterstraße 1, 12345 Musterstadt" value={address} onChange={(e) => setAddress(e.target.value)} className={inputClasses} />
             </div>
 
             <div className="space-y-2">
-              <label className={labelClasses}>{t("tax_id") || "Steuernummer"}</label>
-              <input type="text" value={taxId} onChange={(e) => setTaxId(e.target.value)} className={inputClasses} />
+              <label htmlFor="tax-id" className={labelClasses}>{t("tax_id") || "Steuernummer"}</label>
+              <input id="tax-id" type="text" value={taxId} onChange={(e) => setTaxId(e.target.value)} className={inputClasses} />
             </div>
 
             <div className="space-y-2">
-              <label className={labelClasses}>{t("vat_id") || "Umsatzsteuer-ID"}</label>
-              <input type="text" value={vatId} onChange={(e) => setVatId(e.target.value)} className={inputClasses} />
+              <label htmlFor="vat-id" className={labelClasses}>{t("vat_id") || "Umsatzsteuer-ID"}</label>
+              <input id="vat-id" type="text" value={vatId} onChange={(e) => setVatId(e.target.value)} className={inputClasses} />
             </div>
 
             <div className="space-y-2">
-              <label className={labelClasses}>{t("vat_rate")}</label>
+              <label htmlFor="vat-rate" className={labelClasses}>{t("vat_rate")}</label>
               <div className="relative">
-                <input type="number" value={vatRate} onChange={(e) => setVatRate(parseFloat(e.target.value))} className={inputClasses} min={0} max={100} required />
+                <input id="vat-rate" type="number" value={vatRate} onChange={(e) => setVatRate(parseFloat(e.target.value))} className={inputClasses} min={0} max={100} required />
                 <span className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 font-bold">%</span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className={labelClasses}>{t("corporate_rate")}</label>
+              <label htmlFor="corporate-rate" className={labelClasses}>{t("corporate_rate")}</label>
               <div className="relative">
-                <input type="number" value={corporateTaxRate} onChange={(e) => setCorporateTaxRate(parseFloat(e.target.value))} className={inputClasses} min={0} max={100} required />
+                <input id="corporate-rate" type="number" value={corporateTaxRate} onChange={(e) => setCorporateTaxRate(parseFloat(e.target.value))} className={inputClasses} min={0} max={100} required />
                 <span className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 font-bold">%</span>
               </div>
             </div>
