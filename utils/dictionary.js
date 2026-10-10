@@ -106,6 +106,7 @@ export const dictionary = {
     install_desc: "Installieren Sie TaxManager auf Ihrem Startbildschirm für schnelleren Zugriff.",
     install_now: "Jetzt installieren",
     install_ios_hint: "Tippen Sie auf Teilen, dann auf \"Zum Home-Bildschirm\"",
+    install_android_hint: "Tippen Sie auf ⋮ oben rechts, dann auf \"App installieren\"",
     install_dismiss: "Nicht jetzt"
   },
   en: {
@@ -215,6 +216,7 @@ export const dictionary = {
     install_desc: "Install TaxManager on your home screen for faster access.",
     install_now: "Install Now",
     install_ios_hint: "Tap Share, then \"Add to Home Screen\"",
+    install_android_hint: "Tap ⋮ at the top right, then \"Install app\"",
     install_dismiss: "Not now"
   },
   ar: {
@@ -324,6 +326,7 @@ export const dictionary = {
     install_desc: "ثبّت TaxManager على شاشتك الرئيسية للوصول السريع.",
     install_now: "تثبيت الآن",
     install_ios_hint: "اضغط على زر المشاركة، ثم \"إضافة إلى الشاشة الرئيسية\"",
+    install_android_hint: "اضغط على ⋮ أعلى الشاشة، ثم \"تثبيت التطبيق\"",
     install_dismiss: "ليس الآن"
   },
   fr: {
@@ -433,6 +436,7 @@ export const dictionary = {
     install_desc: "Installez TaxManager sur votre écran d'accueil pour un accès plus rapide.",
     install_now: "Installer maintenant",
     install_ios_hint: "Appuyez sur Partager, puis \"Ajouter à l'écran d'accueil\"",
+    install_android_hint: "Appuyez sur ⋮ en haut à droite, puis \"Installer l'application\"",
     install_dismiss: "Pas maintenant"
   },
   uk: {
@@ -542,6 +546,7 @@ export const dictionary = {
     install_desc: "Встановіть TaxManager на головний екран для швидшого доступу.",
     install_now: "Встановити зараз",
     install_ios_hint: "Натисніть \"Поділитися\", потім \"На екран «Домівка»\"",
+    install_android_hint: "Натисніть ⋮ вгорі справа, потім \"Установити додаток\"",
     install_dismiss: "Не зараз"
   },
   ru: {
@@ -651,6 +656,7 @@ export const dictionary = {
     install_desc: "Установите TaxManager на главный экран для быстрого доступа.",
     install_now: "Установить сейчас",
     install_ios_hint: "Нажмите \"Поделиться\", затем \"На экран «Домой»\"",
+    install_android_hint: "Нажмите ⋮ вверху справа, затем \"Установить приложение\"",
     install_dismiss: "Не сейчас"
   }
 };

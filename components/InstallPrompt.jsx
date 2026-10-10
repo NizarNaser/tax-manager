@@ -20,7 +20,7 @@ function wasRecentlyDismissed() {
 export default function InstallPrompt() {
   const { t } = useLanguage();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showIOSHint, setShowIOSHint] = useState(false);
+  const [platform, setPlatform] = useState(null); // "ios" | "android" | null
   const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
@@ -29,20 +29,20 @@ export default function InstallPrompt() {
       window.navigator.standalone === true;
 
     const ua = navigator.userAgent;
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(ua);
     const isIOS = /iPhone|iPad|iPod/i.test(ua) && !window.MSStream;
+    const isAndroid = /Android/i.test(ua);
 
-    if (isStandalone || !isMobile || wasRecentlyDismissed()) {
+    if (isStandalone || (!isIOS && !isAndroid) || wasRecentlyDismissed()) {
       return;
     }
 
     setDismissed(false);
+    setPlatform(isIOS ? "ios" : "android");
 
-    if (isIOS) {
-      setShowIOSHint(true);
-      return;
-    }
-
+    // Chrome only fires this once its own engagement heuristics are met, so
+    // Android users may not see it on a first visit — the static ⋮ menu
+    // hint below covers that gap and gets replaced by this real button the
+    // moment the browser offers it.
     const handler = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -57,7 +57,7 @@ export default function InstallPrompt() {
     } catch {}
     setDismissed(true);
     setDeferredPrompt(null);
-    setShowIOSHint(false);
+    setPlatform(null);
   };
 
   const install = async () => {
@@ -68,24 +68,31 @@ export default function InstallPrompt() {
     dismiss();
   };
 
-  if (dismissed || (!deferredPrompt && !showIOSHint)) return null;
+  if (dismissed || !platform) return null;
+
+  const hintText =
+    platform === "ios"
+      ? t("install_ios_hint")
+      : deferredPrompt
+      ? t("install_desc")
+      : t("install_android_hint");
 
   return (
-    <div className="w-full max-w-5xl glass rounded-3xl border border-white/5 p-6 mb-8 flex items-center gap-5 relative overflow-hidden">
+    <div className="w-full max-w-5xl glass rounded-3xl border border-white/5 p-6 mb-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 relative overflow-hidden">
       <div className="absolute -right-6 -top-6 w-28 h-28 bg-yellow-500/10 blur-[50px] -z-10"></div>
 
-      <div className="w-14 h-14 shrink-0 bg-gradient-to-br from-[#F2B824] to-[#B48A1B] rounded-2xl flex items-center justify-center text-black font-bold text-2xl shadow-[0_0_20px_rgba(242,184,36,0.2)]">
-        T
+      <div className="flex items-center gap-4 sm:contents">
+        <div className="w-14 h-14 shrink-0 bg-gradient-to-br from-[#F2B824] to-[#B48A1B] rounded-2xl flex items-center justify-center text-black font-bold text-2xl shadow-[0_0_20px_rgba(242,184,36,0.2)]">
+          T
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <h3 className="text-white font-bold text-lg">{t("install_title")}</h3>
+          <p className="text-slate-400 text-sm mt-1">{hintText}</p>
+        </div>
       </div>
 
-      <div className="flex-1 min-w-0">
-        <h3 className="text-white font-bold text-lg">{t("install_title")}</h3>
-        <p className="text-slate-400 text-sm mt-1">
-          {showIOSHint ? t("install_ios_hint") : t("install_desc")}
-        </p>
-      </div>
-
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
         {deferredPrompt && (
           <button
             onClick={install}
